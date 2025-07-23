@@ -102,7 +102,7 @@ def save_source_config(
 def toggle_pipeline(tenant_id: int, toggle: schemas.PipelineToggle, db: Session = Depends(get_db)):
     return crud.toggle_pipeline(db, tenant_id, toggle.pipeline_enabled)
 
-@router.get("/health")
+@app.get("/health")
 def health_snapshot():
     tenants = get_all_tenants()  # Fetch from DB (example: [{"id": 1, "name": "Tenant A"}, ...])
 
