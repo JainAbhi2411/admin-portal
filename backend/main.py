@@ -16,7 +16,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:5173",  # React dev
-    "https://admin-portal.netlify.app",  # add Netlify URL if deploying
+    "https://admiin-portal.netlify.app",  # add Netlify URL if deploying
 ]
 
 # CORS for frontend
