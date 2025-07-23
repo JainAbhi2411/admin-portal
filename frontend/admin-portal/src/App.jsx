@@ -1,4 +1,3 @@
-// src/App.js or App.jsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
@@ -14,23 +13,37 @@ const App = () => {
 
   return (
     <Router>
-      {token && <Navbar role={role} />}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        {token ? (
-          <>
-            <Route path="/" element={<Dashboard role={role} />} />
-            <Route path="/onboarding" element={<Onboarding />} />
-            <Route path="/config" element={<Config />} />
-            {role === "admin" && <Route path="/users" element={<UserManagement />} />}
-          </>
-        ) : (
+      {token ? (
+        <>
+          <Navbar role={role} />
+          <div style={styles.pageContainer}>
+            <Routes>
+              <Route path="/" element={<Dashboard role={role} />} />
+              <Route path="/onboarding" element={<Onboarding />} />
+              <Route path="/config" element={<Config />} />
+              {role === "admin" && <Route path="/users" element={<UserManagement />} />}
+            </Routes>
+          </div>
+        </>
+      ) : (
+        <Routes>
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<Navigate to="/login" />} />
-        )}
-      </Routes>
+        </Routes>
+      )}
     </Router>
   );
 };
 
+const styles = {
+  pageContainer: {
+    marginTop: '60px',       // Height of your fixed navbar
+    padding: '0',
+    width: '100vw',
+    minHeight: 'calc(100vh - 60px)',
+    overflowX: 'hidden',
+    backgroundColor: '#f1f2f6',
+  }
+};
 
 export default App;
