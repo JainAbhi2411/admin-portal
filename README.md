@@ -62,7 +62,7 @@ admin-portal/
 ### Steps:
 ```bash
 # 1. Clone the repo
-git clone https://github.com/your-username/admin-portal.git
+git clone https://github.com/JainAbhi2411/admin-portal.git
 cd admin-portal
 
 # 2. Run everything
