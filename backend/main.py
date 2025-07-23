@@ -25,7 +25,7 @@ app.add_middleware(
     allow_origins=origins,  # can use ["*"] for public API (less secure)
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=["*"],    
 )
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -102,23 +102,25 @@ def save_source_config(
 def toggle_pipeline(tenant_id: int, toggle: schemas.PipelineToggle, db: Session = Depends(get_db)):
     return crud.toggle_pipeline(db, tenant_id, toggle.pipeline_enabled)
 
-@app.get("/health")
+@router.get("/health")
 def health_snapshot():
-    # Simulated data
-    return [
-        {
-            "tenant": "Tenant A",
-            "last_sync": "2025-07-23 10:00",
-            "last_error": "None",
-            "status": "green",
-        },
-        {
-            "tenant": "Tenant B",
-            "last_sync": "2025-07-22 22:00",
-            "last_error": "DB connection failed",
-            "status": "red",
-        }
-    ]
+    tenants = get_all_tenants()  # Fetch from DB (example: [{"id": 1, "name": "Tenant A"}, ...])
+
+    health_data = []
+    for tenant in tenants:
+        # Simulated logic for sync and error status
+        last_sync_time = datetime.now() - timedelta(minutes=tenant["id"] * 15)
+        status = "green" if tenant["id"] % 2 == 0 else "red"
+        last_error = "None" if status == "green" else "Connection timeout"
+
+        health_data.append({
+            "tenant": tenant["name"],
+            "last_sync": last_sync_time.strftime("%Y-%m-%d %H:%M"),
+            "last_error": last_error,
+            "status": status
+        })
+
+    return health_data
 @app.get("/tenant/{tenant_id}/configs")
 def get_configs_for_tenant(tenant_id: int, db: Session = Depends(get_db)):
     configs = db.query(models.SourceConfig).filter(models.SourceConfig.tenant_id == tenant_id).all()
