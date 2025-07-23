@@ -14,10 +14,15 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+origins = [
+    "http://localhost:5173",  # React dev
+    "https://admin-portal.netlify.app",  # add Netlify URL if deploying
+]
+
 # CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,  # can use ["*"] for public API (less secure)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
